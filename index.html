@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hector Perez Server</title>
+  <style>
+    @font-face { font-family: 'miFuente'; src: url('ttf/fuente.otf') format('opentype'); }
+    * { font-family: 'miFuente', monospace !important; box-sizing: border-box; }
+
+    body { background-color: #000; color: #fff; margin: 0; padding: 0; min-height: 100vh; }
+    
+    /* Clases para manejar la navegación */
+    .page { display: none; } /* Oculta todo por defecto */
+    .active { display: block; } /* Solo lo que esté activo se ve */
+
+    /* Menú */
+    .menu-btn { position: fixed; top: 20px; right: 20px; z-index: 1001; cursor: pointer; font-size: 30px; border: 1px solid #fff; padding: 5px 15px; background: #000; }
+    .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; flex-direction: column; align-items: center; justify-content: center; }
+    .menu-link { color: #fff; text-decoration: none; font-size: 24px; margin: 20px; text-transform: uppercase; border: 1px solid #333; width: 80%; text-align: center; padding: 15px; cursor: pointer; }
+    .menu-link:hover { color: #55ff55; border-color: #55ff55; }
+
+    /* Estructura */
+    .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 80px 20px; }
+    .logo-container { margin-bottom: 50px; text-align: center; cursor: pointer; }
+    .server-logo { width: 100%; height: auto; border: 1px solid #333; }
+
+    section { border: 1px solid #222; padding: 30px; background: #0a0a0a; }
+    h1 { text-transform: uppercase; font-size: 20px; margin-top: 0; color: #55ff55; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+    
+    .label { color: #888; font-size: 12px; display: block; margin-top: 15px; }
+    .value { color: #fff; font-size: 16px; display: block; }
+
+    .button { display: block; width: 100%; background: transparent; color: #fff; border: 1px solid #fff; padding: 15px; margin-bottom: 10px; cursor: pointer; text-decoration: none; text-transform: uppercase; font-size: 14px; transition: 0.2s; text-align: center; }
+    .button:hover { background: #fff; color: #000; }
+
+    .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .gallery-item img { width: 100%; height: 120px; object-fit: cover; border: 1px solid #333; }
+    .gallery-item p { font-size: 10px; color: #555; text-transform: uppercase; margin-top: 5px; }
+  </style>
+</head>
+<body>
+
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+  <div class="menu-overlay" id="menu">
+    <div class="menu-link" onclick="showPage('estado')">ESTADO</div>
+    <div class="menu-link" onclick="showPage('info')">INFO TÉCNICA</div>
+    <div class="menu-link" onclick="showPage('reglas')">REGLAS</div>
+    <div class="menu-link" onclick="showPage('escuela')">ESCUELA</div>
+    <div class="menu-link" onclick="showPage('galeria')">GALERÍA</div>
+  </div>
+
+  <div class="container">
+    <!-- Al hacer clic en el logo regresas a ESTADO -->
+    <div class="logo-container" onclick="showPage('estado')"><img src="web/logo.png" alt="Logo" class="server-logo"></div>
+    
+    <!-- SECCIÓN ESTADO (Visible por defecto) -->
+    <section id="estado" class="page active">
+      <h1>ESTADO DEL SERVIDOR</h1>
+      <span class="label">ESTADO:</span> <span id="server-status" class="value">CARGANDO...</span>
+      <span class="label">JUGADORES:</span> <span id="player-count" class="value">0/0</span>
+      <span class="label">IP:</span> <span class="value">HCTORPEREZMARTNEZ.ATERNOS.ME</span>
+      <span class="label">PUERTO:</span> <span class="value">57431</span>
+      <div style="margin-top: 25px;">
+        <a href="minecraft://?addExternalServer=HctorPerezMartnez.aternos.me|HctorPerezMartnez.aternos.me:57431" class="button">Unirse al Servidor</a>
+        <button id="copy-btn" onclick="copyIP()" class="button">Copiar Dirección</button>
+        <a href="#" class="button">Discord Oficial</a>
+      </div>
+    </section>
+
+    <!-- OTRAS SECCIONES (Ocultas por defecto) -->
+    <section id="info" class="page">
+      <h1>INFO TÉCNICA</h1>
+      <span class="label">JUGADORES MÁX:</span> <span class="value">30</span>
+      <span class="label">GAMEMODE:</span> <span class="value">SURVIVAL</span>
+      <span class="label">DIFICULTAD:</span> <span class="value">NORMAL</span>
+      <span class="label">SEED:</span> <span class="value">6702073349529160667</span>
+      <span class="label">ADMIN PRINCIPAL:</span> <span class="value">INSANOYT8280</span>
+      <span class="label">ADMIN SECUNDARIO:</span> <span class="value">BARTOLITO 123</span>
+    </section>
+
+    <section id="reglas" class="page">
+      <h1>REGLAS</h1>
+      <p style="font-size: 14px; color: #aaa; line-height: 1.6;">
+        1. CHEATS PERMITIDOS (ES ANARQUÍA).<br>
+        2. SPAWN DESTRUIDO POR EL ADMIN (ES SU DERECHO).<br>
+        3. RESPETO MUTUO ENTRE JUGADORES.<br>
+        4. DISFRUTAR EL CAOS.
+      </p>
+    </section>
+
+    <section id="escuela" class="page">
+      <h1>ESCUELA DR. HÉCTOR PEREZ</h1>
+      <a href="https://maps.app.goo.gl/X9Brs52ovDh15Rzg7" target="_blank" style="color: #fff; text-decoration: none; display: block; margin-bottom: 10px;">
+        📍 UBICACIÓN: CAMPECHE (CLICK AQUÍ)
+      </a>
+    </section>
+
+    <section id="galeria" class="page">
+      <h1>GALERÍA</h1>
+      <div class="gallery-grid">
+        <div class="gallery-item"><img src="web/fotos/casa del Admin.jpg"><p>Casa Admin</p></div>
+        <div class="gallery-item"><img src="web/fotos/Muralla.jpg"><p>Muralla</p></div>
+        <div class="gallery-item"><img src="web/fotos/Piramide.jpg"><p>Pirámide</p></div>
+        <div class="gallery-item"><img src="web/fotos/almacén.jpg"><p>Almacén</p></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Función para alternar visibilidad de las secciones
+    function showPage(pageId) {
+      // Ocultar todas las secciones
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => page.classList.remove('active'));
+      
+      // Mostrar la seleccionada
+      document.getElementById(pageId).classList.add('active');
+      
+      // Cerrar menú
+      toggleMenu();
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Lógica del servidor
+    fetch('https://api.mcsrvstat.us/2/HctorPerezMartnez.aternos.me:57431')
+      .then(r => r.json())
+      .then(d => {
+        document.getElementById('server-status').innerText = d.online ? "ENCENDIDO" : "APAGADO";
+        document.getElementById('server-status').style.color = d.online ? "#55ff55" : "#ff5555";
+        if(d.online) document.getElementById('player-count').innerText = `${d.players.online} / ${d.players.max}`;
+        else document.getElementById('player-count').innerText = "0 / 0";
+      });
+
+    function copyIP() {
+      navigator.clipboard.writeText("HctorPerezMartnez.aternos.me:57431");
+      const btn = document.getElementById('copy-btn');
+      btn.innerText = "COPIADO";
+      setTimeout(() => btn.innerText = "Copiar Dirección", 2000);
+    }
+  </script>
+</body>
+</html>
+
